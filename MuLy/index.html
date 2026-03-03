@@ -171,11 +171,9 @@ function _execScripts(el) {
 async function loadPanel(url, target) {
   const inner = target || $('subpage-inner');
   inner.innerHTML = '<div class="ml-empty">⌛ Cargando...</div>';
-  if (!target) document.head.querySelectorAll('style[data-panel]').forEach(s => s.remove());
   try {
     const html = await fetch(url).then(r => { if (!r.ok) throw new Error('HTTP '+r.status); return r.text(); });
     inner.innerHTML = html;
-    inner.querySelectorAll('style').forEach(s => { s.dataset.panel = '1'; document.head.appendChild(s); });
     _execScripts(inner);
     inner.dispatchEvent(new CustomEvent('contentLoaded', { bubbles: true }));
   } catch(e) { inner.innerHTML = '<div class="ml-empty">Error: '+esc(e.message)+'</div>'; }
@@ -184,14 +182,13 @@ async function loadPanel(url, target) {
 const subLoaders = { stats: loadStats, servers: loadServers, cats: loadCats, theme: loadTheme, amule: loadAmulePrefs, uploading: loadUploading };
 function openSub(name) {
   $('subpage-inner').innerHTML = '<div class="ml-empty">⌛ Cargando...</div>';
-  document.head.querySelectorAll('style[data-panel]').forEach(s => s.remove());
   $('subpage-wrap').classList.add('open');
   if (subLoaders[name]) subLoaders[name]();
   else loadPanel(name);
 }
 function closeSub() {
   $('subpage-wrap').classList.remove('open');
-  document.head.querySelectorAll('style[data-panel]').forEach(s => s.remove());
+  $('subpage-inner').innerHTML = '';
 }
 
 function showApp() {
@@ -232,7 +229,7 @@ document.querySelectorAll('.ml-navbtn').forEach(btn => {
     }
     if (curPanel === 'downloads') {
       switchDlTab(curDlTab);
-      dlTimer = setInterval(() => { loadDownloads(); if (curDlTab === 'completed') loadShared(); }, 3000);
+      dlTimer = setInterval(() => { if (curDlTab === 'completed') loadShared(); else loadDownloads(); }, 3000);
     }
     if (curPanel === 'config') { loadSrvInfo(); loadConnState(); }
     if (curPanel === 'irc' && !$('panel-irc').dataset.loaded) {
