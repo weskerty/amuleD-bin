@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>MuLy · aMule</title>
+<title>MuLy</title>
 <link rel="icon" href="../web/favicon.ico">
 <link rel="stylesheet" href="estilo.css">
 </head>
@@ -18,10 +18,10 @@
 <div id="login" class="ml-login-wrap">
   <div class="ml-login-box">
     <img src="../web/ICON.png" class="ml-logo-img" alt="MuLy">
-    <div class="ml-sub">MuLy · aMule EC · 127.0.0.1:4712</div>
+    <div class="ml-sub">MuLy</div>
     <label class="ml-label">Password</label>
     <input class="ml-input" type="password" id="pw-input"
-      placeholder="••••••••"
+      placeholder="0"
       autocomplete="current-password" autocorrect="off"
       spellcheck="false" enterkeyhint="go">
     <button class="ml-btn" id="login-btn">Conectar</button>
@@ -51,9 +51,17 @@
       <div class="ml-card">
         <div class="ml-filter-bar">
           <span class="ml-count" id="results-count">Sin resultados</span>
-          <input class="ml-search-input ml-filter-input" id="filter-input"
-            placeholder="Filtrar: .mp4 .mkv..."
-            autocomplete="off" autocorrect="off" spellcheck="false">
+          <div class="ml-filter-row">
+            <div class="ml-fq-group">
+              <button class="ml-fq" data-fq="music" title="Musica">🎶</button>
+              <button class="ml-fq" data-fq="video" title="Imagenes y Videos">🎥</button>
+              <button class="ml-fq" data-fq="books" title="Libros y Texto">📚</button>
+              <button class="ml-fq ml-fq--all" data-fq="" title="Todos">🗂️</button>
+            </div>
+            <input class="ml-search-input ml-filter-input" id="filter-input"
+              placeholder="Filtrar: .mp4 .mkv..."
+              autocomplete="off" autocorrect="off" spellcheck="false">
+          </div>
         </div>
         <div id="results-wrap"><div class="ml-empty">Introduce un termino de busqueda</div></div>
       </div>
@@ -85,13 +93,18 @@
     <div class="ml-panel" id="panel-config">
       <div class="ml-card">
         <div class="ml-config-grid">
-          <button class="ml-config-item" onclick="openSub('stats')"><span class="ci-ico">📊</span><span class="ci-lbl">Stats</span></button>
-          <button class="ml-config-item" onclick="openSub('servers')"><span class="ci-ico">🌐</span><span class="ci-lbl">Servers</span></button>
-          <button class="ml-config-item" onclick="openSub('cats')"><span class="ci-ico">🏷️</span><span class="ci-lbl">Categorias</span></button>
-          <button class="ml-config-item" onclick="openSub('uploading')"><span class="ci-ico">📤</span><span class="ci-lbl">Subiendo</span></button>
-          <button class="ml-config-item" onclick="openSub('theme')"><span class="ci-ico">🎨</span><span class="ci-lbl">Tema</span></button>
-          <button class="ml-config-item" onclick="openSub('amule')"><span class="ci-ico">🫏</span><span class="ci-lbl">aMule</span></button>
+          <button class="ml-config-item" onclick="toggleAmuleCat(this)"><span class="ci-ico">🫏</span><span class="ci-lbl">aMule</span></button>
           <button class="ml-config-item" onclick="openSub('about.html')"><span class="ci-ico">ℹ️</span><span class="ci-lbl">About</span></button>
+        </div>
+        <div class="ml-amule-cat" id="amule-cat">
+          <div class="ml-config-grid">
+            <button class="ml-config-item" onclick="openSub('amule')"><span class="ci-ico">⚙️</span><span class="ci-lbl">Conf</span></button>
+            <button class="ml-config-item" onclick="openSub('stats')"><span class="ci-ico">📊</span><span class="ci-lbl">Stats</span></button>
+            <button class="ml-config-item" onclick="openSub('servers')"><span class="ci-ico">🌐</span><span class="ci-lbl">Servers</span></button>
+            <button class="ml-config-item" onclick="openSub('cats')"><span class="ci-ico">🏷️</span><span class="ci-lbl">Categorias</span></button>
+            <button class="ml-config-item" onclick="openSub('uploading')"><span class="ci-ico">📤</span><span class="ci-lbl">Subiendo</span></button>
+            <button class="ml-config-item" onclick="openSub('theme')"><span class="ci-ico">🎨</span><span class="ci-lbl">Tema</span></button>
+          </div>
         </div>
       </div>
       <div class="ml-card">
@@ -294,13 +307,16 @@ function applyResults(data) {
   renderResults();
 }
 function renderResults() {
-  const ext = ($('filter-input').value || '').trim().toLowerCase();
-  const list = ext ? searchResults.filter(f => f.fileName?.toLowerCase().includes(ext)) : searchResults;
-  $('results-count').textContent = ext
+  const raw = ($('filter-input').value || '').trim().toLowerCase();
+  const exts = raw ? raw.split(/\s+/).filter(Boolean) : [];
+  const list = exts.length
+    ? searchResults.filter(f => { const n = f.fileName?.toLowerCase() || ''; return exts.some(e => n.includes(e)); })
+    : searchResults;
+  $('results-count').textContent = exts.length
     ? list.length+'/'+searchResults.length+' resultados'
     : searchResults.length+' resultado'+(searchResults.length !== 1 ? 's' : '');
   if (!list.length) {
-    $('results-wrap').innerHTML = '<div class="ml-empty">'+(ext?'Sin resultados para ese filtro':'Sin resultados aun')+'</div>';
+    $('results-wrap').innerHTML = '<div class="ml-empty">'+(exts.length?'Sin resultados para ese filtro':'Sin resultados aun')+'</div>';
     return;
   }
   $('results-wrap').innerHTML = list.map(f => {
@@ -319,7 +335,25 @@ function renderResults() {
 }
 $('search-btn').onclick = doSearch;
 $('search-input').addEventListener('keydown', e => { if(e.key==='Enter') doSearch(); });
-$('filter-input').oninput = renderResults;
+const FQ = {
+  music: 'mp3 flac ogg aac wav wma m4a opus aiff ape alac mka mid midi',
+  video: 'mp4 mkv avi mov wmv flv webm m4v mpg mpeg ts vob jpg jpeg png gif webp bmp tiff svg heic avif raw cr2 nef',
+  books: 'pdf epub mobi azw azw3 djvu cbz cbr fb2 doc docx odt rtf txt md markdown rst'
+};
+document.querySelectorAll('.ml-fq').forEach(btn => {
+  btn.onclick = () => {
+    const fi = $('filter-input');
+    fi.value = FQ[btn.dataset.fq] || '';
+    document.querySelectorAll('.ml-fq').forEach(b => b.classList.remove('ml-fq--on'));
+    btn.classList.add('ml-fq--on');
+    renderResults();
+  };
+});
+$('filter-input').oninput = () => {
+  document.querySelectorAll('.ml-fq').forEach(b => b.classList.remove('ml-fq--on'));
+  renderResults();
+};
+
 
 async function downloadFile(hash, btn) {
   btn.disabled = true; btn.textContent = '⌛';
@@ -603,6 +637,11 @@ async function loadAmulePrefs() {
   } catch(e) { $('subpage-inner').innerHTML = '<div class="ml-empty">Error</div>'; err(e.message); }
 }
 
+function toggleAmuleCat(btn) {
+  const c = $('amule-cat');
+  const open = c.classList.toggle('open');
+  btn.classList.toggle('ml-config-item--active', open);
+}
 async function saveAmulePrefs() {
   const body = {
     maxDownload: parseInt($('ap-dl').value) || 0,
