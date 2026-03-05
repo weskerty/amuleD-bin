@@ -22,6 +22,9 @@ proot-distro install archlinux
 cat > ~/.bashrc <<'EOF'
 termux-wake-lock
 
+mkdir -p /sdcard/Download/aMule
+ln -sfn /sdcard/Download/aMule repo/MuLy/Archivos
+
 R='\033[0;31m'
 G='\033[0;32m'
 Y='\033[1;33m'
