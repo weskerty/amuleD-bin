@@ -7,16 +7,16 @@ StartLimitBurst=10
 
 [Service]
 Type=simple
-User=levanter
-Group=levanter
-WorkingDirectory=/opt/aMuleD.bin/repo
+User=muly
+Group=muly
+WorkingDirectory=/opt/MuLy/repo
 
-Environment=HOME=/opt/aMuleD.bin/home
-Environment=VOLTA_HOME=/opt/aMuleD.bin/home/.volta
-Environment=PATH=/opt/aMuleD.bin/home/.volta/bin:/usr/local/bin:/usr/bin:/bin
-Environment=NPM_CONFIG_PREFIX=/opt/aMuleD.bin/repo/node_modules/.bin
+Environment=HOME=/opt/MuLy/home
+Environment=VOLTA_HOME=/opt/MuLy/home/.volta
+Environment=PATH=/opt/MuLy/home/.volta/bin:/usr/local/bin:/usr/bin:/bin
+Environment=NPM_CONFIG_PREFIX=/opt/MuLy/repo/node_modules/.bin
 
-ExecStart=/opt/aMuleD.bin/repo/START.sh
+ExecStart=/opt/MuLy/repo/START.sh
 
 Restart=always
 RestartSec=30
