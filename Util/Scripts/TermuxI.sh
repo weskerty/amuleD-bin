@@ -84,6 +84,6 @@ chmod +x START.sh
 ./START.sh &
 sleep 20
 echo "[D] Iniciando" 
- /data/data/com.termux/files/usr/bin/termux-open "localhost:2658"
+ /data/data/com.termux/files/usr/bin/termux-open "localhost:2685"
 '
 
