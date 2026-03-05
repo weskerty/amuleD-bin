@@ -1,5 +1,5 @@
 [Unit]
-Description=aMuleD.bin AppImage&Web
+Description=MuLy Search & Download localhost:6859
 After=network-online.target
 Wants=network-online.target
 StartLimitIntervalSec=300
@@ -47,8 +47,8 @@ TimeoutStopSec=30
 IOSchedulingPriority=4
 
 
-MemoryHigh=300M
-MemoryMax=500M
+MemoryHigh=500M
+MemoryMax=900M
 CPUQuota=20%
 Nice=10
 #CPUAffinity=0 1
