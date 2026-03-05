@@ -474,4 +474,4 @@ app.get('/files{/*path}', (req, res) => {
   res.sendFile(abs);
 });
 
-server.listen(8000, () => log('MuLy → http://localhost:8000'));
+server.listen(6859, () => log('MuLy → http://localhost:6859'));
