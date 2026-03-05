@@ -22,7 +22,7 @@ proot-distro install archlinux
 cat > ~/.bashrc <<'EOF'
 termux-wake-lock
 
-mkdir -p /sdcard/Download/aMule
+mkdir -p /sdcard/Download/MuLy
 ln -sfn /sdcard/Download/aMule repo/MuLy/Archivos
 
 R='\033[0;31m'
@@ -75,7 +75,7 @@ git clone https://github.com/weskerty/aMuleD.bin.git repo
 
 echo "[D] "
 
-mkdir -p /sdcard/Download/aMule
+mkdir -p /sdcard/Download/MuLy
 
 echo "[D] Descargas estaran en tu Carpeta Descargas."
 ln -sfn /sdcard/Download/aMule repo/MuLy/Archivos
