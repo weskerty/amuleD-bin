@@ -56,7 +56,7 @@ fi
 echo
 echo -e "${G}Iniciando aMuleD / Starting aMuleD${N}"
 
-proot-distro login archlinux -- bash -c 'cd repo 2>/dev/null || true && chmod +x START.sh && (sleep 20 && /data/data/com.termux/files/usr/bin/termux-open http://localhost:2685) && ./START.sh'
+proot-distro login archlinux -- bash -c 'cd repo 2>/dev/null || true && chmod +x START.sh && (sleep 20 && /data/data/com.termux/files/usr/bin/termux-open http://localhost:6859) && ./START.sh'
 
 EOF
 
@@ -84,6 +84,6 @@ chmod +x START.sh
 ./START.sh &
 sleep 20
 echo "[D] Iniciando" 
- /data/data/com.termux/files/usr/bin/termux-open "localhost:2685"
+ /data/data/com.termux/files/usr/bin/termux-open "localhost:6859"
 '
 
