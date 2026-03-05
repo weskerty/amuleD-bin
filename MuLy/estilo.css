@@ -128,7 +128,25 @@ dialog button:hover { background: rgba(255,80,80,0.45); }
   margin-bottom: 14px;
 }
 
+.ml-filter-row { display: flex; align-items: center; gap: 0; flex: 1; min-width: 0; }
+.ml-fq-group { display: flex; }
+.ml-fq-group + .ml-filter-input { border-radius: 0 10px 10px 0; border-left: none; }
+.ml-fq {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-right: none;
+  color: #fff; cursor: pointer;
+  font-size: .95rem; padding: 6px 9px;
+  transition: background .15s;
+  line-height: 1;
+}
+.ml-fq:first-child { border-radius: 10px 0 0 10px; }
+.ml-fq--all { border-right: none; }
+.ml-fq:hover { background: rgba(255,255,255,0.14); }
+.ml-fq--on { background: rgba(255,255,255,0.2); }
+
 .ml-filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+
 .ml-filter-input { max-width: 160px; font-size: .75rem; padding: 6px 10px; }
 
 .ml-dl-tabs { display: flex; gap: 6px; }
@@ -275,6 +293,12 @@ dialog button:hover { background: rgba(255,80,80,0.45); }
   white-space: nowrap;
 }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.ml-config-item--active { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.28); }
+.ml-amule-cat { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .25s ease; }
+.ml-amule-cat > .ml-config-grid { overflow: hidden; padding: 0; }
+.ml-amule-cat.open { grid-template-rows: 1fr; }
+.ml-amule-cat.open > .ml-config-grid { padding-top: 12px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
